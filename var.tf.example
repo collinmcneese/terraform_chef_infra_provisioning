@@ -1,0 +1,111 @@
+# Example of variables which are consumed by the module
+
+variable "aws_profile" {
+  type        = string
+  description = "AWS profile to use"
+  default     = "default"
+}
+
+variable "aws_region" {
+  type    = string
+  description = "AWS region to use"
+  default = "us-west-2"
+}
+
+variable "aws_vpc_id" {
+  type    = string
+  description = "VPC ID to use"
+  default = "vpc-12345678"
+}
+
+variable "aws_subnet_id" {
+  description = "Subnet id to use"
+  type        = string
+  default     = "subnet-12345678"
+}
+
+variable "chef_local_exec_servers" {
+  description = "Name of systems to bootstrap with local-exec provisioner"
+  type        = list(string)
+  default     = ["chef-server-local"]
+}
+
+variable "chef_remote_exec_servers" {
+  description = "Name of systems to bootstrap with remote-exec provisioner"
+  type        = list(string)
+  default     = ["chef-server-remote"]
+}
+
+variable "chef_remote_bootstrap_user" {
+  description = "User account name which will be used for executing remote bootstrap functions"
+  type        = string
+  default     = "ec2-user"
+}
+
+variable "aws_instance_type" {
+  type = string
+  description = "AWS instance type to use"
+  default = "t3.micro"
+}
+
+variable "aws_key" {
+  description = "name of AWS key pair to use for Instance credentials"
+  type        = string
+  default     = "my-aws-keypair"
+}
+
+variable "aws_key_file_local" {
+  description = "Path to AWS key PEM file on local filesystem"
+  type        = string
+  default     = "/path/to/my-aws-keypair-file.pem"
+}
+
+variable "aws_tags" {
+  type = map(any)
+  description = "AWS instance tags to use"
+  default = {
+    My_Tag = "My_Value"
+  }
+}
+
+variable "security_group_ingress_cidr" {
+  description = "CIDR block list to be allowed ingress access to ec2 instance(s)"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "chef_workstation_config_path" {
+  description = "Path to Chef Workstation config file, used with chef_local_exec"
+  type        = string
+  default     = "/path/to/.chef/config.rb"
+}
+
+variable "chef_bootstrap_clientrb_content" {
+  description = "Content of config file, used with chef_remote_exec"
+  default     = <<CLIENTRB
+log_level                :info
+log_location             STDOUT
+chef_server_url          "https://ChefInfraServerFQDN/organizations/myOrgName"
+validation_client_name   'client_name'
+validation_key           '/etc/chef/validator.pem'
+  CLIENTRB
+}
+
+variable "chef_bootstrap_firstbootjson_content" {
+  description = "Content of first-boot.json file, used with chef_remote_exec"
+  default     = <<FIRSTBOOTJSON
+  {
+    "policy_group": "some_policy_group",
+    "policy_name": "some_policy_name"
+  }
+  FIRSTBOOTJSON
+}
+
+variable "chef_bootstrap_pem_content" {
+  description = "PEM content to use for remote-exec bootstrap, used with chef_remote_exec"
+  default     = <<PEMCONTENT
+-----BEGIN RSA PRIVATE KEY-----
+... key content ...
+-----END RSA PRIVATE KEY-----
+  PEMCONTENT
+}
